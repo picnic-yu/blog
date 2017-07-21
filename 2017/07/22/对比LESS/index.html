@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Sass/Less ComparisonIn this document I am using Sass’s SCSS syntax. You can choose to use the indented syntaxin sass, if you prefer it, it has no functional differences from the SCSS syntax. For Less,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/2017/07/22/对比LESS/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Sass/Less ComparisonIn this document I am using Sass’s SCSS syntax. You can choose to use the indented syntaxin sass, if you prefer it, it has no functional differences from the SCSS syntax. For Less,">
+<meta property="og:updated_time" content="2016-05-11T16:17:16.354Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="Sass/Less ComparisonIn this document I am using Sass’s SCSS syntax. You can choose to use the indented syntaxin sass, if you prefer it, it has no functional differences from the SCSS syntax. For Less,">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-对比LESS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/22/对比LESS/" class="article-date">
+  <time datetime="2017-07-21T23:24:04.625Z" itemprop="datePublished">2017-07-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Sass-Less-Comparison"><a href="#Sass-Less-Comparison" class="headerlink" title="Sass/Less Comparison"></a>Sass/Less Comparison</h1><p>In this document I am using Sass’s SCSS syntax. You can choose to use the indented syntax<br>in sass, if you prefer it, it has no functional differences from the SCSS syntax.</p>
+<p>For Less, I’m using the JavaScript version because this is what they suggest on the website.<br>The ruby version may be different.</p>
+<h2 id="Variables"><a href="#Variables" class="headerlink" title="Variables"></a>Variables</h2><pre><code>Sass             | Less
+-----------------+-----------------
+$color: red;     | @color: red;
+div {            | div {
+  color: $color; |   color: @color;
+}                | }
+</code></pre><p>Both languages support scoped variable definition within a selector context.<br>However they differ in their behavior:</p>
+<pre><code>Sass                     | Less
+-------------------------+-----------------
+$color: black;           | @color: black;
+.scoped {                | .scoped {
+  $bg: blue;             |   @bg: blue;
+  $color: white;         |   @color: white;
+  color: $color;         |   color: @color;
+  background-color: $bg; |   background-color: @bg;
+}                        | }
+.unscoped {              | .unscoped {
+  color: $color;         |   color: @color;
+  // Would be an error   |   // Would be an error
+  // background: $bg;    |   // background: @bg;
+}                        | }
+</code></pre><p>And their different output:</p>
+<pre><code>Sass Output                 | Less Output
+----------------------------+----------------------------
+.scoped {                   | .scoped {
+  color: white;             |   color: white;
+  background-color: blue;   |   background-color: blue;
+}                           | }
+.unscoped { color: white; } | .unscoped { color: black; }
+</code></pre><h2 id="Nested-Selectors"><a href="#Nested-Selectors" class="headerlink" title="Nested Selectors"></a>Nested Selectors</h2><p>Sass and Less have the <code>&amp;</code> selector that allows nested selector to refer to the parent scope.</p>
+<pre><code>Sass               | Less
+-------------------+-----------------
+p {                | p {
+  a {              |   a {
+    color: red;    |     color: red;
+    &amp;:hover {      |     &amp;:hover {
+      color: blue; |       color: blue;
+    }              |     }
+  }                |   }
+}                  | }
+</code></pre><h2 id="Mixins"><a href="#Mixins" class="headerlink" title="Mixins"></a>Mixins</h2><pre><code>Sass                              | Less
+----------------------------------+----------------------------------
+@mixin bordered {                 | .bordered {
+  border-top: dotted 1px black;   |   border-top: dotted 1px black;
+  border-bottom: solid 2px black; |   border-bottom: solid 2px black;
+}                                 | }
+                                  | 
+#menu a {                         | #menu a {
+  @include bordered;              |   .bordered;
+}                                 | }
+</code></pre><h2 id="Mixins-with-Arguments-Dynamic-Mixins"><a href="#Mixins-with-Arguments-Dynamic-Mixins" class="headerlink" title="Mixins with Arguments / Dynamic Mixins"></a>Mixins with Arguments / Dynamic Mixins</h2><pre><code>Sass                              | Less
+----------------------------------+----------------------------------
+@mixin bordered($width: 2px) {    | .bordered(@width: 2px) {
+  border: $width solid black;     |   border: @width solid black;
+}                                 | }
+                                  | 
+#menu a {                         | #menu a {
+  @include bordered(4px);         |   .bordered(4px);
+}                                 | }
+</code></pre><h2 id="Selector-Inheritance"><a href="#Selector-Inheritance" class="headerlink" title="Selector Inheritance"></a>Selector Inheritance</h2><p>Less does not provide selector inheritance.</p>
+<pre><code>Sass                        | Less  | CSS Output
+----------------------------+-------+---------------------------
+.bordered {                 |  N/A  | .bordered, #menu a {
+  border: 1px solid back;   |       |   border: 1px solid back; }
+}                           |       |
+                            |       |
+#menu a {                   |       |
+  @extend .bordered;        |       |
+}                           |       |
+</code></pre><h2 id="Colors"><a href="#Colors" class="headerlink" title="Colors"></a>Colors</h2><p>Both less and sass provide color math. It was a bad idea in Sass, I’m not sure why<br>less chose to copy it. There’s no point in comparing them.</p>
+<p>Sass provides a full array of tools for manipulating colors. All color representations<br>(named colors, hex, rgb, rgba, hsl, hsla) are understood as colors and colors can be manipulated.</p>
+<p>Sass exposes a long list of color functions not found in CSS:</p>
+<p>Accessors:</p>
+<ul>
+<li><code>red($color)</code></li>
+<li><code>green($color)</code></li>
+<li><code>blue($color)</code></li>
+<li><code>hue($color)</code></li>
+<li><code>saturation($color)</code></li>
+<li><code>lightness($color)</code></li>
+<li><code>alpha($color)</code></li>
+</ul>
+<p>Mutators:</p>
+<ul>
+<li><code>lighten($color, $amount)</code></li>
+<li><code>darken($color, $amount)</code></li>
+<li><code>saturate($color, $amount)</code></li>
+<li><code>desaturate($color, $amount)</code></li>
+<li><code>adjust-hue($color, $amount)</code></li>
+<li><code>opacify($color, $amount)</code></li>
+<li><code>transparentize($color, $amount)</code></li>
+<li><code>mix($color1, $color2[, $amount])</code></li>
+<li><code>grayscale($color)</code></li>
+<li><code>compliment($color)</code></li>
+</ul>
+<p>Note: <a href="https://github.com/cloudhead/less.js/blob/master/lib/less/functions.js" target="_blank" rel="external">Less.js provides a number of similar color functions</a>.</p>
+<h2 id="Numbers"><a href="#Numbers" class="headerlink" title="Numbers"></a>Numbers</h2><p>Both Sass and Less support numbers and basic arithmetic. However they differ<br>significantly with respect to how they handle units.</p>
+<p>Sass supports unit-based arithmetic, just like you learned in school. Complex<br>units are supported in any intermediate form and will only raise an error if you<br>try to print out the value of a complex unit.</p>
+<p>Additionally, Sass has conversion tables so that any comparable units can be combined.</p>
+<p>Sass will let you define your own units and will happily print out unknown units<br>into your css. Less will not. Sass does this as a form of future proofing against<br>changes in the w3c specification or in case a browser introduces a non-standard unit.</p>
+<p>Sass:</p>
+<pre><code>1cm * 1em =&gt; 1 cm * em
+2in * 3in =&gt; 6 in * in
+(1cm / 1em) * 4em =&gt; 4cm
+2in + 3cm + 2pc =&gt; 3.514in
+3in / 2in =&gt; 1.5
+</code></pre><p>Less:</p>
+<pre><code>1cm * 1em =&gt; Error
+2in * 3in =&gt; 6in
+(1cm / 1em) * 4em =&gt; Error
+2in + 3cm + 2pc =&gt; Error
+3in / 2in =&gt; 1.5in
+</code></pre><h2 id="Conditionals-amp-Control-Structures"><a href="#Conditionals-amp-Control-Structures" class="headerlink" title="Conditionals &amp; Control Structures"></a>Conditionals &amp; Control Structures</h2><p>Less does not provide any conditionals or looping structures. Instead, it provides <em>mixin guards</em> and <em>pattern-matching</em> which can be used to similar effect.</p>
+<p>Sass and Less provides provide boolean types <code>true</code> and <code>false</code>, the <code>and</code>, <code>or</code>, and <code>not</code> operators as well as <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>==</code> operators. There are minor syntax differences between the two (Sass syntax shown here).</p>
+<p>Some sass examples:</p>
+<pre><code>@if lightness($color) &gt; 30% {
+  background-color: black;
+}
+@else {
+  background-color: white;
+}
+</code></pre><p>Looping:</p>
+<pre><code>@for $i from 1px to 10px {
+  .border-#{i} {
+    border: $i solid blue;
+  }
+}
+</code></pre><p>A similar example in Less, using mixins:</p>
+<pre><code>.mixin (@color) when (lightness(@color) &gt; 30%) {
+  background-color: black;
+}
+.mixin (@color) when (lightness(@color) =&lt; 30%) {
+  background-color: white;
+}
+</code></pre><p>Less supports looping via recursion, but not (yet) selector interpolation as shown in the Sass example, so it is of limited use.</p>
+<h2 id="Server-Side-Imports"><a href="#Server-Side-Imports" class="headerlink" title="Server Side Imports"></a>Server Side Imports</h2><p>Both sass and less will import other sass and less files.</p>
+<h2 id="Output-formatting"><a href="#Output-formatting" class="headerlink" title="Output formatting"></a>Output formatting</h2><p>Less has three output formats: normal, compressed &amp; yui-compressed. Sass has four: nested, compact, compressed, expanded.</p>
+<p>Sass output compression currently beats the google pagespeed css plugin output by a few percent.</p>
+<h2 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h2><p>Less and Sass both support C-style (<code>/* */</code>) and C++ Style comments (<code>//</code>).</p>
+<h2 id="Namespaces"><a href="#Namespaces" class="headerlink" title="Namespaces"></a>Namespaces</h2><p>Less provides a feature that Sass does not:</p>
+<pre><code>#bundle () {
+  .red { background-color: red }
+  .green { background-color: green }
+}
+
+.foo {
+  #bundle &gt; .red;
+}
+</code></pre><p>Generates:</p>
+<pre><code>.foo {
+  background-color: red;
+}
+</code></pre><p>The sass team considered this feature and decided that adding it would create<br>fragility and unexpected interconnectedness.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/07/22/对比LESS/" data-id="cj5eht66m0001rwfcdzah3qul" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/07/22/对比LESS/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
